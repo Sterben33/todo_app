@@ -21,12 +21,13 @@ var Counter int32 = 0
 
 func NewTask(Title,Body string) Task {
 	defer func() {Counter++}()
-	return Task{id:Counter, title:Title, body: Body, done: false}
+	TaskList[Counter] = Task{id:Counter, title:Title, body: Body, done: false}
+	return TaskList[Counter]
 }
 
 
 func (s *GRPCServer) Get(ctx context.Context, request *api.GetRequest) (*api.GetResponce, error) {
-	if t, err := TaskList[request.Id]; err == false {
+	if t, err := TaskList[request.GetId()]; err == true {
 		return &api.GetResponce{Id: t.id, Title: t.title, Body: t.body, Done: t.done}, nil
 	}
 	return &api.GetResponce{}, errors.New("Task with such ID does not exist. ")
