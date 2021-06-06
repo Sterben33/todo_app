@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = ".";
+
+service ToDo {
+  rpc Get(GetRequest) returns (GetResponce) {}
+}
+
+message GetRequest {
+  int32 id = 1;
+}
+
+message GetResponce {
+  int32 id = 1;
+  string title = 2;
+  string  body = 3;
+  bool done = 4;
+}
