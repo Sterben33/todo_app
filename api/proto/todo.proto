@@ -5,16 +5,31 @@ package api;
 option go_package = ".";
 
 service ToDo {
-  rpc Get(GetRequest) returns (GetResponce) {}
+  rpc Create(Data) returns (Task) {}
+  rpc Read(TaskId) returns (Task) {}
+  rpc Update(Task) returns (Task) {}
+  rpc Delete(TaskId) returns (Empty) {}
+  rpc MarkAsDone(TaskId) returns (Task) {}
+  rpc GetList(Empty) returns (TaskList) {}
 }
 
-message GetRequest {
+message Empty {}
+
+message Data {
+  string title = 1;
+  string body = 2;
+}
+message TaskId {
   int32 id = 1;
 }
 
-message GetResponce {
+message Task {
   int32 id = 1;
   string title = 2;
   string  body = 3;
   bool done = 4;
+}
+
+message TaskList {
+  repeated Task task = 1;
 }
