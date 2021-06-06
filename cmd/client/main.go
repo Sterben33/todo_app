@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"todo_app/pkg/api"
 )
 
@@ -33,10 +34,12 @@ func GetData() (string, string, error){
 	//Getting title
 	fmt.Print("Input new title: ")
 	title, _ := reader.ReadString('\n')
+	title = strings.Replace(title, "\n", "", -1)
 
 	//Getting body
 	fmt.Print("Input new body: ")
 	body, _ := reader.ReadString('\n')
+	body = strings.Replace(body, "\n", "", -1)
 
 	return title, body, nil
 }
@@ -97,7 +100,7 @@ func main() {
 				}
 				res, e := c.Read(context.Background(), &api.TaskId{Id: id})
 				if e != nil {
-					fmt.Println(err)
+					fmt.Println(e)
 					continue
 				}
 				fmt.Println(res.GetBody())
