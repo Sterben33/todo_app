@@ -42,13 +42,20 @@ func GetData() (string, string, error){
 }
 func main() {
 
-	conn, err := grpc.Dial(":5000", grpc.WithInsecure())
+	conn, err := grpc.Dial(":5050", grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer conn.Close() // Close connection when interrupted
 
 	c := api.NewToDoClient(conn)
+
+	// Check connection
+	_, err = c.Read(context.Background(), &api.TaskId{Id: 0})
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	b := true
 
 	for b {

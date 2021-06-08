@@ -23,7 +23,7 @@ func main()  {
 	todo.NewTask("Task 3. ", "Rest a little. ")
 	todo.NewTask("Task 4. ", "Go to sleep. ")
 
-	l, err := net.Listen("tcp", ":5000")
+	l, err := net.Listen("tcp", ":5050")
 	if err != nil {
 		log.Fatal(err)
 	}
