@@ -15,9 +15,6 @@ import (
 var input string
 
 func GetId() (int32, error){
-
-
-
 	//Getting id
 	fmt.Println("Input id of the task. ")
 	_, err1 := fmt.Scanf("%s", &input)
@@ -49,10 +46,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer conn.Close()
+	defer conn.Close() // Close connection when interrupted
 
 	c := api.NewToDoClient(conn)
 	b := true
+
 	for b {
 		fmt.Println("Choose an option:\n" +
 			"list - get list of the tasks.\n" +
@@ -63,6 +61,7 @@ func main() {
 			"done - mark as completed by id.\n" +
 			"q - quit. ")
 
+		fmt.Println()
 		_, err = fmt.Scanf("%s", &input)
 		if err != nil {
 			fmt.Println(err)
@@ -76,8 +75,8 @@ func main() {
 					fmt.Println(err)
 					continue
 				}
-				for task := range res.Task {
-					fmt.Printf("%v %v %v %v\n",res.Task[task].GetId(),res.Task[task].GetTitle(),res.Task[task].GetBody(),res.Task[task].GetDone())
+				for _, task := range res.Task {
+					fmt.Println(task)
 					fmt.Println("--------------------")
 				}
 
@@ -91,7 +90,8 @@ func main() {
 					fmt.Println(e)
 					continue
 				}
-				fmt.Println(res.GetBody())
+				fmt.Println(res)
+
 			case "read":
 				id, err := GetId()
 				if err != nil {
@@ -103,11 +103,17 @@ func main() {
 					fmt.Println(e)
 					continue
 				}
-				fmt.Println(res.GetBody())
+				fmt.Println(res)
+
 			case "update":
 				id, er := GetId()
 				if er != nil {
 					fmt.Println(er)
+					continue
+				}
+				_, e := c.Read(context.Background(), &api.TaskId{Id: id})
+				if e != nil {
+					fmt.Println(e)
 					continue
 				}
 				title, body, err := GetData()
@@ -121,6 +127,8 @@ func main() {
 					continue
 				}
 				fmt.Println(res)
+				fmt.Println("Updated successfully. ")
+
 			case "delete":
 				id, err := GetId()
 				if err != nil {
@@ -133,6 +141,7 @@ func main() {
 					continue
 				}
 				fmt.Println("Deleted successfully. ")
+
 			case "done":
 				id, err := GetId()
 				if err != nil {
@@ -144,10 +153,14 @@ func main() {
 					fmt.Println(e)
 					continue
 				}
-				fmt.Printf("%v", res.GetBody())
+				fmt.Println(res)
+				fmt.Println("Changed successfully. ")
 
 			case "q":
 				b = false
+
+			default:
+				fmt.Println("Unknown command. ")
 		}
 		fmt.Println()
 		fmt.Println()
@@ -155,5 +168,4 @@ func main() {
 			break
 		}
 	}
-
 }

@@ -148,7 +148,10 @@ type Task struct {
 }
 
 func (m *Task) Reset()         { *m = Task{} }
-func (m *Task) String() string { return proto.CompactTextString(m) }
+func (m *Task) String() string {
+	return fmt.Sprintf("Id: %v\nTitle: %v\nBody: %v\nDone: %v",m.GetId(),m.GetTitle(),m.GetBody(),m.GetDone())
+}
+//func (m *Task) String() string { return proto.CompactTextString(m) }
 func (*Task) ProtoMessage()    {}
 func (*Task) Descriptor() ([]byte, []int) {
 	return fileDescriptor_b3ce579ad8bb256f, []int{3}

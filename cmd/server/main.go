@@ -9,10 +9,15 @@ import (
 )
 
 func main()  {
+	//Creating server
 	s := grpc.NewServer()
 	srv := &todo.GRPCServer{}
 	api.RegisterToDoServer(s,srv)
 
+	// Stop server when interrupted
+	defer s.Stop()
+
+	// Some tasks that will be available at the very beginning
 	todo.NewTask("Task 1. ", "Do your homework. ")
 	todo.NewTask("Task 2. ", "Clean your room. ")
 	todo.NewTask("Task 3. ", "Rest a little. ")
